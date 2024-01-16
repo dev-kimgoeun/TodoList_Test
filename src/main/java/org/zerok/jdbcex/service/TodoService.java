@@ -1,5 +1,6 @@
 package org.zerok.jdbcex.service;
 
+import com.sun.tools.javac.comp.Todo;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.zerok.jdbcex.dao.TodoDAO;
@@ -24,7 +25,7 @@ public enum TodoService {
     }
     public void register (TodoDTO todoDTO) throws Exception{
         TodoVO todoVO = modelMapper.map(todoDTO, TodoVO.class);
-        //System.out.println("todoVO : " + todoVO);
+        System.out.println("todoVO : " + todoVO);
         log.info(todoVO);
         dao.insert(todoVO);
     }
@@ -39,5 +40,12 @@ public enum TodoService {
                 .collect(Collectors.toList());
 
         return dtoList;
+    }
+    public TodoDTO get(Long tno) throws Exception {
+
+        log.info("tno : " + tno);
+        TodoVO todoVO = dao.selectOne(tno);
+        TodoDTO todoDTO = modelMapper.map(todoVO, TodoDTO.class);
+        return todoDTO;
     }
 }
