@@ -3,6 +3,8 @@ package org.zerok.jdbcex.controller;
 import com.sun.jna.platform.win32.WinBase;
 import com.sun.org.apache.bcel.internal.generic.IOR;
 import lombok.extern.java.Log;
+import org.zerok.jdbcex.dto.MemberDTO;
+import org.zerok.jdbcex.service.MemberService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,10 +31,16 @@ public class LoginController extends HttpServlet{
         String mid = req.getParameter("mid");
         String mpw = req.getParameter("mpw");
 
-        String str = mid+mpw;
+        try{
+            MemberDTO memberDTO = MemberService.INSTANCE.login(mid,mpw);
+            HttpSession session = req.getSession();
+            session.setAttribute("loginInfo", memberDTO);
+            resp.sendRedirect("/todo/list");
+        }catch (Exception e){
+            resp.sendRedirect("/login?result=error");
+        }
 
-        HttpSession session = req.getSession();
-        session.setAttribute("loginInfo", str);
-        resp.sendRedirect("/todo/list");
+
+
     }
 }
